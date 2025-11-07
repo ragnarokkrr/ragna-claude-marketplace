@@ -1,0 +1,16 @@
+Example Reference Article	https://example.com/article
+	Main Concept
+		Key Point 1
+			Supporting Detail A
+			Supporting Detail B
+		Key Point 2
+			Supporting Detail C
+	Implementation Details
+		Approach 1
+			Step 1
+			Step 2
+		Approach 2
+			Technical Requirement
+	Related Concepts
+		Connection to Topic A
+		Connection to Topic B

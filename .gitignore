@@ -33,3 +33,8 @@ venv/
 # Build outputs
 dist/
 build/
+
+# Reference content (optionally exclude large files)
+# Uncomment to ignore downloaded reference content:
+# .memory/references/contents/
+# Keep References.md, summaries, and mindmaps tracked by default
