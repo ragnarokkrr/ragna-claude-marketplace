@@ -1,0 +1,35 @@
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+.temp/
+
+# Node modules (if using Node.js tooling)
+node_modules/
+
+# Python (if using Python tooling)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Environment variables
+.env
+.env.local
+
+# Build outputs
+dist/
+build/

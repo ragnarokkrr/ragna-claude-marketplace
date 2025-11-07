@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "user-prompt-submit": {
+      "command": "echo 'User prompt submitted'",
+      "description": "Runs when user submits a prompt"
+    },
+    "tool-use": {
+      "command": "echo 'Tool used: {{tool_name}}'",
+      "description": "Runs when a tool is used"
+    }
+  }
+}
