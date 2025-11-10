@@ -1,0 +1,13 @@
+{
+  "name": "ragna-local-marketplace",
+  "owner": {
+    "name": "npadilha"
+  },
+  "plugins": [
+    {
+      "name": "ragna-claude-plugins",
+      "source": "../ragna-claude-plugins",
+      "description": "Claude Code plugins for RagnaRokkrr integration"
+    }
+  ]
+}
