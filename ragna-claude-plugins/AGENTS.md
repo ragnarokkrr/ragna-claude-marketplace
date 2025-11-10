@@ -1,67 +1,42 @@
 # AGENTS.md
 
-This file provides guidance to any automated coding agent working in this repository (e.g., Claude Code, CodeLlama, GPT-based tools). Use it as the source of truth for expectations and project context.
+This document converts `CLAUDE.md` into direct instructions for autonomous coding agents that work inside `ragna-claude-plugins`.
 
-## Project Overview
+## Mission
+- Ship a Claude Code plugin that augments RagnaRokkrr workflows via custom commands, agents, skills, and hooks.
+- Keep `.claude-plugin/plugin.json` authoritative; update it whenever metadata changes and bump the semantic version.
 
-This is a Claude Code plugin project for RagnaRokkrr integration. The plugin extends Claude's capabilities through custom commands, agents, skills, and event hooks that the IDE can surface as slash commands or autonomous helpers.
+## Component Rules
+**Commands** (`commands/*.md`)
+- Must start with YAML frontmatter containing `description`.
+- File name = slash command (`rgn.add-reference.md` → `/rgn.add-reference`).
+- Body is injected into the conversation; keep it procedural and deterministic.
 
-## Architecture
+**Agents** (`agents/*.md`)
+- Begin with YAML frontmatter containing `name`, `description`, and optional `model`, `color`, `tools`.
+- Provide clear “When to Use”, “Operating Principles”, and workflow sections so Claude can act autonomously.
 
-### Plugin Manifest System
-
-The `.claude-plugin/plugin.json` file is the core metadata descriptor. Any changes to plugin name, description, version, or author information must be reflected here. This file is read by Claude Code (and any compatible loader) during plugin installation and loading.
-
-### Component Types
-
-**Commands** (`commands/`)
-- Markdown files that expand into conversation prompts when invoked via `/command-name`
-- Must include YAML frontmatter with `description`
-- File name determines the slash command name (e.g., `example.md` → `/example`)
-- Content after frontmatter is injected into the conversation context
-
-**Agents** (`agents/`)
-- Markdown files defining specialized agent behaviors for specific tasks
-- Require both `name` and `description` in YAML frontmatter
-- Structure should include: Purpose, Instructions, and Example Usage sections
-- Used for autonomous task execution within Claude Code
-
-**Skills** (`skills/`)
-- Organized as subdirectories containing `SKILL.md` files
-- Provide reusable capabilities invoked during conversations
-- Each skill directory represents a discrete capability
-- Frontmatter must include `name` and `description`
+**Skills** (`skills/*/SKILL.md`)
+- Each skill lives in its own directory.
+- Frontmatter must declare `name` and `description`.
+- Document invocation steps and expected outcomes.
 
 **Hooks** (`hooks/hooks.json`)
-- JSON configuration for event-driven automation
-- Available events: `user-prompt-submit`, `tool-use`, and others
-- Each hook specifies a shell command and description
-- Supports template variables (e.g., `{{tool_name}}`)
+- JSON schema: `{"hooks": {"event-name": {"command": "...", "description": "..."}}}`.
+- Supported events include `user-prompt-submit`, `tool-use`, etc.
+- Commands should be idempotent bash snippets; note any template variables (e.g., `{{tool_name}}`).
 
 ## Development Workflow
+1. **Choose component type** using the rules above.
+2. **Scaffold files** with correct frontmatter and section headings.
+3. **Implement logic** tailored to RagnaRokkrr processes (replace placeholders ASAP).
+4. **Test locally** by installing through the marketplace (`/plugin marketplace add …` then `/plugin install ragna-claude-plugins`).
+5. **Document changes** in README/CLAUDE if they impact users or future agents.
 
-### Creating New Components
+## Testing & Validation
+- Ensure `.memory/references/` structure exists when working on `/rgn.add-reference`.
+- Use `jq` to validate JSON manifests before committing.
+- After adding commands/agents/skills, reinstall the plugin and trigger each component (slash command, Task tool, skill invocation).
 
-When adding functionality:
-1. Determine the appropriate component type (command vs agent vs skill)
-2. Create the file in the correct directory with proper frontmatter
-3. For skills, create a new subdirectory under `skills/` first
-4. Test the component by installing the plugin locally
-
-### Local Testing
-
-To test this plugin:
-1. Create `.claude-plugin/marketplace.json` referencing this plugin's directory
-2. Use Claude Code's plugin installation to load from the local marketplace
-3. Verify components are accessible (commands via `/`, agents via Task tool, skills via invocation)
-
-### Plugin Metadata Updates
-
-When modifying `.claude-plugin/plugin.json`:
-- Version changes require semantic versioning (MAJOR.MINOR.PATCH)
-- Description changes affect how the plugin appears in listings
-- Name changes require reinstallation for users
-
-## RagnaRokkrr Integration Context
-
-This plugin specifically targets RagnaRokkrr integration. Components should be designed to work with RagnaRokkrr's architecture and workflows. Replace example templates with concrete implementations aligned to RagnaRokkrr's needs whenever possible.
+## RagnaRokkrr Focus
+Every artifact should support RagnaRokkrr integration scenarios. When adding examples or templates, tailor them to real RagnaRokkrr workflows (architecture documentation, reference gathering, etc.) instead of generic placeholders.
