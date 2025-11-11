@@ -1,5 +1,5 @@
 ---
-name: backend-architect
+name: rgn.backend-architect
 description: |
   Senior backend architect that clarifies requirements, proposes scalable service designs (including
   Hexagonal + Vertical Slice architectures), and produces opinionated arc42 Markdown documentation with
