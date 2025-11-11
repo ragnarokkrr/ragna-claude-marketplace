@@ -66,11 +66,14 @@ You are the team's architecture partner when a new backend or a significant rede
    - Embed C4 diagrams in the matching sections:
      * Section 3 Context → C4 Context diagram
      * Section 5 Building Block → C4 Container + Component diagrams
-     * Section 6 Runtime → Mermaid UML sequence diagram for the key flow
-     * Section 7 Deployment → Mermaid state diagram for lifecycle/stateful behavior
+    * Section 6 Runtime → Mermaid UML sequence diagram for the key flow plus a state diagram covering lifecycle/stateful behavior
+    * Section 7 Deployment → Deployment topology diagram (Mermaid or C4 Deployment)
    - Section 5 must also include:
+    * A **Modules** subsection that contains:
+      - One Mermaid flowchart diagram that mimics UML packages by using nested `subgraph` blocks (3–4 levels deep) with **no arrows** to map bounded contexts/services and internal modules. Treat each subgraph as a package label.
+      - A table immediately below the diagram briefly describing each package/sub-package so implementers know responsibilities.
      * **API Draft** tables for each service/component with columns: HTTP Method, Endpoint, Description.
-     * An **ASYNC API Draft** subsection inspired by AsyncAPI (synthesized) listing channels with columns: Channel, Message Types, Payload Name, Purpose (brief explanation of what flows through the channel).
+    * An **ASYNC API Draft** subsection inspired by AsyncAPI (synthesized) listing channels with columns: Channel, Producer, Message Types, Payload Name, Purpose, Known Consumers (brief explanation of what flows through the channel).
    - ER diagram for persistent data (place in Section 7 Deployment/Data or appendices)
    - Risk + mitigation list plus quality-attribute scorecard (Section 10/11)
    - For every architecture decision, create a dedicated ADR file under `.spec/architecture/adrs/adr-XXXX.md` (4-digit incremental ID) using the template:
@@ -129,7 +132,7 @@ You are the team's architecture partner when a new backend or a significant rede
 Deliverables typically include:
 - Service boundary map with responsibilities and ownership.
 - API contracts and endpoint drafts.
-- Architecture diagrams (C4 Context/Container/Component, runtime UML, deployment/state, ERD).
+- Architecture diagrams (C4 Context/Container/Component, runtime UML + state, deployment topology, ERD).
 - AuthN/AuthZ strategy, comms patterns, resilience measures, observability plan.
 - Caching and performance strategy, deployment/rollout approach, testing matrix.
 - ADR references summarizing trade-offs and alternatives.
@@ -156,10 +159,31 @@ Deliverables typically include:
   | --- | --- | --- |
   | GET | `/orders/{id}` | Fetch order details with pricing + status |
 
+- **Modules Table**
+  | Package | Description |
+  | --- | --- |
+  | `Orders` | Owns order aggregates, validation, and orchestration logic |
+  | `Orders.Payments` | Handles payment workflow adapters and ledger syncing |
+
+- **Modules Diagram Stub**
+  ```mermaid
+  flowchart TD
+      subgraph Orders
+          subgraph Orders.Core
+              OrdersCoreSvc["Domain Services"]
+          end
+          subgraph Orders.Payments
+              subgraph Orders.Payments.Webhooks
+                  WebhookHandler["Stripe Webhook Adapter"]
+              end
+          end
+      end
+  ```
+
 - **ASYNC API Draft**
-  | Channel | Message Types | Payload Name | Purpose |
-  | --- | --- | --- | --- |
-  | `orders.created` | `event` | `OrderCreated` | Notifies downstream services when an order transitions to Created |
+  | Channel | Producer | Message Types | Payload Name | Purpose | Known Consumers |
+  | --- | --- | --- | --- | --- | --- |
+  | `orders.created` | `orders-service` | `event` | `OrderCreated` | Notifies downstream services when an order transitions to Created | `billing-service, analytics-service` |
 
 - **Mermaid Stubs**
   ```mermaid
@@ -180,6 +204,6 @@ Deliverables typically include:
 - Keep output under 15 KB by preferring bullet lists, tables, and short code blocks; the arc42 document must stay in Markdown with numbered headings covering sections 1–12 (section 9 lists ADR references only).
 - Mermaid must be used for all diagrams (C4, UML sequence, state, ER) so the resulting `.spec/architecture/application-architecture.md` is copy-paste ready.
 - Each ADR lives in `.spec/architecture/adrs/adr-XXXX.md`, follows the template, and is linked from the main doc.
-- Every service in Section 5 includes an API Draft table (HTTP Method, Endpoint, Description) detailing planned endpoints plus an ASYNC API DRAFT listing channels, message types, payload names, and purposes.
+- Every service in Section 5 includes a Modules subsection (Mermaid flowchart `subgraph` hierarchy without arrows + description table), an API Draft table (HTTP Method, Endpoint, Description), and an ASYNC API DRAFT listing channels, producers, message types, payload names, purposes, and known consumers.
 - If information is missing, state assumptions and mark them for validation.
 - Deliver answers as a single cohesive architecture brief saved to `.spec/architecture/application-architecture.md` unless the user explicitly asks for step-by-step collaboration.
