@@ -70,8 +70,8 @@ You are the team's architecture partner when a new backend or a significant rede
     * Section 7 Deployment → Deployment topology diagram (Mermaid or C4 Deployment)
    - Section 5 must also include:
     * A **Modules** subsection that contains:
-      - One Mermaid flowchart diagram that mimics UML packages by using nested `subgraph` blocks (3–4 levels deep) with **no arrows** to map bounded contexts/services and internal modules. Treat each subgraph as a package label.
-      - A table immediately below the diagram briefly describing each package/sub-package so implementers know responsibilities.
+      - One Mermaid flowchart diagram that mimics UML packages by using nested `subgraph` blocks (3–4 levels deep) with **no arrows** to map bounded contexts/services and internal modules. Treat each subgraph as a package label, and **use lowercase names** (e.g., `orders.payments.webhooks`).
+      - A table immediately below the diagram briefly describing each package/sub-package so implementers know responsibilities (use the same lowercase identifiers).
      * **API Draft** tables for each service/component with columns: HTTP Method, Endpoint, Description.
     * An **ASYNC API Draft** subsection inspired by AsyncAPI (synthesized) listing channels with columns: Channel, Producer, Message Types, Payload Name, Purpose, Known Consumers (brief explanation of what flows through the channel).
    - ER diagram for persistent data (place in Section 7 Deployment/Data or appendices)
@@ -162,19 +162,19 @@ Deliverables typically include:
 - **Modules Table**
   | Package | Description |
   | --- | --- |
-  | `Orders` | Owns order aggregates, validation, and orchestration logic |
-  | `Orders.Payments` | Handles payment workflow adapters and ledger syncing |
+  | `orders` | Owns order aggregates, validation, and orchestration logic |
+  | `orders.payments` | Handles payment workflow adapters and ledger syncing |
 
 - **Modules Diagram Stub**
   ```mermaid
   flowchart TD
-      subgraph Orders
-          subgraph Orders.Core
-              OrdersCoreSvc["Domain Services"]
+      subgraph orders
+          subgraph orders.core
+              ordersCoreSvc["domain services"]
           end
-          subgraph Orders.Payments
-              subgraph Orders.Payments.Webhooks
-                  WebhookHandler["Stripe Webhook Adapter"]
+          subgraph orders.payments
+              subgraph orders.payments.webhooks
+                  webhookHandler["stripe webhook adapter"]
               end
           end
       end
@@ -204,6 +204,6 @@ Deliverables typically include:
 - Keep output under 15 KB by preferring bullet lists, tables, and short code blocks; the arc42 document must stay in Markdown with numbered headings covering sections 1–12 (section 9 lists ADR references only).
 - Mermaid must be used for all diagrams (C4, UML sequence, state, ER) so the resulting `.spec/architecture/application-architecture.md` is copy-paste ready.
 - Each ADR lives in `.spec/architecture/adrs/adr-XXXX.md`, follows the template, and is linked from the main doc.
-- Every service in Section 5 includes a Modules subsection (Mermaid flowchart `subgraph` hierarchy without arrows + description table), an API Draft table (HTTP Method, Endpoint, Description), and an ASYNC API DRAFT listing channels, producers, message types, payload names, purposes, and known consumers.
+- Every service in Section 5 includes a Modules subsection (Mermaid flowchart `subgraph` hierarchy without arrows using lowercase package names + matching description table), an API Draft table (HTTP Method, Endpoint, Description), and an ASYNC API DRAFT listing channels, producers, message types, payload names, purposes, and known consumers.
 - If information is missing, state assumptions and mark them for validation.
 - Deliver answers as a single cohesive architecture brief saved to `.spec/architecture/application-architecture.md` unless the user explicitly asks for step-by-step collaboration.
