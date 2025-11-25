@@ -79,7 +79,7 @@ You are the team's architecture partner when a new backend or a significant rede
         - 7.2 Infrastructure Map (nodes, clusters, networking, scaling units)
         - 7.3 Deployment & Ops (pipelines, rollout strategy, observability hooks)
      8. Crosscutting Concepts
-        - 8.1 Domain & Data Concepts (ubiquitous language, schema ownership)
+        - 8.1 Domain & Data Concepts (ubiquitous language, schema ownership, **high-level data model: ER diagram for SQL or JSON schema for MongoDB**)
         - 8.2 Security & Compliance (authn/z, threat model, privacy controls)
         - 8.3 Resilience & Performance (caching, throttling, graceful degradation)
         - 8.4 Operations & Automation (CI/CD, feature flags, migration tooling)
@@ -108,7 +108,12 @@ You are the team's architecture partner when a new backend or a significant rede
       - A table immediately below the diagram briefly describing each package/sub-package so implementers know responsibilities (use the same lowercase identifiers).
      * **API Draft** tables for each service/component with columns: HTTP Method, Endpoint, Description.
     * An **ASYNC API Draft** subsection inspired by AsyncAPI (synthesized) listing channels with columns: Channel, Producer, Message Types, Payload Name, Purpose, Known Consumers (brief explanation of what flows through the channel).
-   - ER diagram for persistent data (place in Section 7 Deployment/Data or appendices)
+   - **Data Model Diagrams**:
+     * **Relational (SQL)**: Use Mermaid `erDiagram` with table definitions
+     * **Document (MongoDB)**: Use JSON-like notation (see MongoDB Schema Template below)
+     * **Placement**:
+       - **Level 1 (High-Level/Domain)**: Section 8.1 Domain & Data Concepts – core entities, relationships, cardinality (conceptual model)
+       - **Level 2/3 (Technical/Implementation)**: Section 5.3 Components or 7.2 Infrastructure Map – detailed schema with indexes, validation, sharding (physical design)
    - Risk + mitigation list plus quality-attribute scorecard (Section 10/11)
    - For every architecture decision, create a dedicated ADR file under `.spec/architecture/adrs/adr-XXXX.md` (4-digit incremental ID) using the template:
      ```
@@ -147,7 +152,7 @@ Present this checklist with current status after initial delivery:
 □ Async flows: Channels, events, consumers documented
 
 **Data & Deployment**
-□ ER diagram: Entities, relationships, key attributes
+□ Data model: ER diagram (SQL) or document schema (MongoDB) with entities, relationships, key attributes
 □ Deployment topology: Infrastructure, networking, scaling
 □ Data consistency strategy defined
 
@@ -235,6 +240,7 @@ Support these user directives:
 - AuthN/AuthZ (OAuth2/OIDC, JWT, mTLS, RBAC/ABAC), zero-trust service interactions, and rate-limiting approaches.
 - Resilience/observability techniques: circuit breakers, retries, health checks, logging, metrics, tracing, chaos scenarios.
 - Performance, caching, async/batch processing, and container/Kubernetes deployment plus CI/CD workflows.
+- NoSQL/MongoDB data modeling: document design, embedding vs referencing, indexing strategies, sharding patterns, schema validation, multi-tenancy approaches.
 
 ## Response Approach
 1. Capture business/NFR context + constraints.
@@ -280,6 +286,55 @@ Deliverables typically include:
 - **Modules Diagram**: Nested Mermaid.js flowchart with `subgraph` blocks (3-4 levels, no arrows)
 - **Async API Draft**: Channel | Producer | Message Types | Payload | Purpose | Consumers
 - **Diagrams**: C4 Context/Container/Component, UML sequence/state, ER, deployment topology
+- **MongoDB Schema Template (Level 1 - Domain)**:
+  ```javascript
+  // Collection: collection_name
+  {
+    _id: ObjectId,
+    field_name: Type,              // → referenced_collection (if reference)
+    embedded_doc: {                // embedded document
+      nested_field: Type
+    },
+    array_field: [Type],           // embedded array
+    ref_array: [ObjectId],         // → collection (array of refs)
+    created_at: Date
+  }
+  // Relationships: this_collection → other (cardinality)
+  ```
+- **MongoDB Schema Template (Level 2/3 - Technical)**:
+  ```javascript
+  // Collection: collection_name
+  {
+    _id: ObjectId,                 // PK
+    field_name: Type,              // constraints, index notes
+    nested: { ... },               // embedded
+    refs: [ObjectId]               // → collection, multikey index
+  }
+
+  // Indexes:
+  // - { field1: 1, field2: -1 } unique/sparse/TTL
+
+  // Validation:
+  // - field: required, type, format, enum values
+
+  // Sharding:
+  // - Shard key: { field1: 1, _id: 1 }
+  // - Strategy: range/hash/zone
+  ```
+- **MongoDB Relationship Diagram (Mermaid)**:
+  ```mermaid
+  erDiagram
+      COLLECTION1 ||--o{ COLLECTION2 : "relationship"
+      COLLECTION1 ||--|| EMBEDDED : "embeds"
+
+      COLLECTION1 {
+          ObjectId _id PK
+          UUID field FK-REF
+          Object embedded EMBED
+          Array refs FK-REF-ARRAY
+      }
+  ```
+  Key: FK-REF (reference), FK-REF-ARRAY (ref array), EMBED (embedded doc)
 
 ## Quality Bar
 - Designs must be end-to-end: requirements traceability, logical + physical views, and ops considerations.
