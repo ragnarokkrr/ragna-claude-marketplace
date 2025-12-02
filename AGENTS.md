@@ -16,6 +16,16 @@ This file tells any autonomous coding agent how to work inside the `ragna-claude
 └── README.md                         # Marketplace overview
 ```
 
+## Available Agents
+The `ragna-claude-plugins` plugin provides these specialized agents:
+- **backend-architect** - arc42 docs, C4/UML/ER diagrams, ADRs, architectural patterns
+- **kubernetes-engineer** - k8s/k3s deployment, manifests, Helm, GitOps
+- **mongodb-pro** - MongoDB schema, aggregation, indexing, sharding, performance
+- **sql-pro** - SQL query optimization, schema design across PostgreSQL/MySQL/SQL Server/Oracle
+- **spring-boot-engineer** - Spring Boot 3+ with JDK 24+ features, microservices, cloud-native
+
+See `ragna-claude-plugins/CLAUDE.md` and `ragna-claude-plugins/agents/*.md` for details.
+
 ## Operating Rules
 1. **Marketplace entries**: ensure each plugin object contains `name`, `source` (path relative to `.claude-plugin/marketplace.json`), and `description`. Update `version` fields if listed.
 2. **Adding plugins**:

@@ -6,6 +6,13 @@ This document converts `CLAUDE.md` into direct instructions for autonomous codin
 - Ship a Claude Code plugin that augments RagnaRokkrr workflows via custom commands, agents, skills, and hooks.
 - Keep `.claude-plugin/plugin.json` authoritative; update it whenever metadata changes and bump the semantic version.
 
+## Available Agents
+- **backend-architect** - arc42 architecture docs with C4/UML/ER diagrams, ADRs, architectural patterns (Hexagonal, DDD, microservices)
+- **kubernetes-engineer** - k8s/k3s deployment, manifest generation, Helm charts, GitOps, cluster troubleshooting
+- **mongodb-pro** - MongoDB schema design, aggregation pipelines, indexing, sharding, replication, performance tuning
+- **sql-pro** - SQL query optimization, schema design, indexing strategies for PostgreSQL/MySQL/SQL Server/Oracle
+- **spring-boot-engineer** - Spring Boot 3+ with JDK 24+ (virtual threads, structured concurrency), microservices, cloud-native
+
 ## Component Rules
 **Commands** (`commands/*.md`)
 - Must start with YAML frontmatter containing `description`.

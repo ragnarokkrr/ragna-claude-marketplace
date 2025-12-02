@@ -99,6 +99,23 @@ allowed-tools: ["Tool1", "Tool2"]  # optional
 ---
 ```
 
+## Available Agents (ragna-claude-plugins)
+
+The primary plugin `ragna-claude-plugins` provides the following specialized agents:
+
+### Architecture & Design
+- **backend-architect** - Senior backend architect for scalable service design with arc42 documentation, C4/UML/ER diagrams, and ADRs
+- **kubernetes-engineer** - Kubernetes deployment specialist with k3s support, manifest generation, Helm charts, and GitOps patterns
+
+### Database Specialists
+- **mongodb-pro** - MongoDB expert for document modeling, aggregation pipelines, indexing, sharding, and performance optimization
+- **sql-pro** - SQL specialist across PostgreSQL, MySQL, SQL Server, Oracle with focus on query optimization and schema design
+
+### Application Development
+- **spring-boot-engineer** - Spring Boot 3+ engineer leveraging JDK 24+ features (virtual threads, structured concurrency) for cloud-native microservices
+
+For detailed agent documentation, see `ragna-claude-plugins/CLAUDE.md` and individual agent files in `ragna-claude-plugins/agents/`.
+
 ## Testing Plugins
 
 ### Local Testing Workflow

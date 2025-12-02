@@ -21,6 +21,34 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 - Supports Hexagonal, Vertical Slice, DDD, microservices patterns
 - Output: `.spec/architecture/application-architecture.md` and `adrs/`
 
+**kubernetes-engineer.md**
+- Kubernetes deployment and operations specialist
+- k3s lightweight cluster management for development and edge deployments
+- Manifest generation (Deployments, Services, ConfigMaps, Secrets, Ingress)
+- Helm chart development and GitOps patterns
+- Cluster troubleshooting and resource optimization
+
+**mongodb-pro.md**
+- Expert MongoDB developer for document-oriented database design
+- Aggregation pipeline construction and optimization
+- Schema design with embedding vs. referencing strategies
+- Indexing strategies, sharding, and replication configuration
+- Performance optimization and query plan analysis
+
+**spring-boot-engineer.md**
+- Spring Boot 3+ engineer with JDK 24+ modern Java features
+- Virtual threads, structured concurrency, pattern matching expertise
+- Microservices architecture and Spring Cloud integration
+- Reactive programming with WebFlux
+- Production-ready applications with comprehensive testing
+
+**sql-pro.md**
+- Expert SQL developer across PostgreSQL, MySQL, SQL Server, Oracle
+- Complex query optimization and execution plan analysis
+- Database schema design and normalization
+- Indexing strategies and partition schemes
+- Data warehouse design (star schema, snowflake) and ETL patterns
+
 ### Commands (`commands/`)
 
 **rgn.add-reference.md** (13,796 lines)
