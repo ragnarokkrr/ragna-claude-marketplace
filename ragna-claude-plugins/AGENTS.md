@@ -8,10 +8,11 @@ This document converts `CLAUDE.md` into direct instructions for autonomous codin
 
 ## Available Agents
 - **backend-architect** - arc42 architecture docs with C4/UML/ER diagrams, ADRs, architectural patterns (Hexagonal, DDD, microservices)
+- **principal-engineer** - Scaffolds production-ready Java Spring Boot projects from arc42 architecture specs, generates Maven/Gradle config, package structure, skeleton classes
+- **spring-boot-engineer** - Spring Boot 3+ with JDK 24+ (virtual threads, structured concurrency), microservices, cloud-native
 - **kubernetes-engineer** - k8s/k3s deployment, manifest generation, Helm charts, GitOps, cluster troubleshooting
 - **mongodb-pro** - MongoDB schema design, aggregation pipelines, indexing, sharding, replication, performance tuning
 - **sql-pro** - SQL query optimization, schema design, indexing strategies for PostgreSQL/MySQL/SQL Server/Oracle
-- **spring-boot-engineer** - Spring Boot 3+ with JDK 24+ (virtual threads, structured concurrency), microservices, cloud-native
 
 ## Component Rules
 **Commands** (`commands/*.md`)

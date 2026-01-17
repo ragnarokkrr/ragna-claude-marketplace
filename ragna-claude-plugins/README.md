@@ -63,6 +63,87 @@ Design a REST API backend for a task management system with:
 
 ---
 
+#### principal-engineer
+
+Principal engineer agent that scaffolds production-ready Java Spring Boot projects from architecture specifications created by backend-architect.
+
+**Capabilities:**
+- Architecture document parsing (arc42 format, ADRs)
+- Maven/Gradle build configuration generation with JDK 24+ support
+- Package structure generation following architectural patterns (Hexagonal, Vertical Slice, DDD, Layered)
+- Skeleton code generation (controllers, services, repositories, entities, DTOs, configuration classes)
+- Multi-module project setup for microservices
+- Docker and Kubernetes manifest generation
+- Comprehensive handoff documentation (README, IMPLEMENTATION-GUIDE)
+- Integration with spring-boot-engineer for implementation
+
+**Output:**
+- Complete Maven/Gradle project structure
+- Skeleton Java classes with TODOs for implementation
+- Configuration files (application.yml with profiles)
+- Docker and Kubernetes manifests
+- README.md and IMPLEMENTATION-GUIDE.md
+- Test directory structure and base classes
+
+**When to Use:**
+- After backend-architect creates architecture documentation
+- Starting new Java Spring Boot microservices
+- Converting architecture designs into code scaffolding
+- Setting up multi-module Maven/Gradle projects
+- Preparing projects for team implementation
+
+**Example Usage:**
+```
+Scaffold a Spring Boot project based on the architecture in .spec/architecture/application-architecture.md:
+- Read the arc42 documentation
+- Follow the Hexagonal architecture pattern
+- Create Maven project structure
+- Generate skeleton classes for all components
+- Setup Docker and Kubernetes configs
+- Prepare handoff documentation
+```
+
+**Agent Properties:**
+- Model: inherit
+- Color: purple
+- Tools: Read, Write, Edit, Bash, Glob, Grep, Skill
+
+**Workflow Integration:**
+```
+backend-architect → principal-engineer → spring-boot-engineer
+(Design)          → (Scaffold)         → (Implement)
+```
+
+---
+
+#### spring-boot-engineer
+
+Spring Boot 3+ engineer agent that implements production-ready applications with JDK 24+ modern Java features.
+
+**Capabilities:**
+- JDK 24+ features (virtual threads, structured concurrency, pattern matching, records, sealed types)
+- Spring Boot 3+ application implementation
+- Microservices architecture and Spring Cloud integration
+- Reactive programming with WebFlux (when appropriate)
+- Security implementation (OAuth2, JWT)
+- Testing strategies (unit, integration, contract tests with >85% coverage)
+- Performance optimization (caching, connection pooling, async processing)
+- Production observability (metrics, tracing, logging)
+
+**When to Use:**
+- Implementing business logic after project scaffolding
+- Adding Spring Boot features to existing projects
+- Integrating Spring Cloud components
+- Performance tuning and optimization
+- Adding comprehensive test coverage
+
+**Agent Properties:**
+- Model: inherit
+- Color: green
+- Tools: Read, Write, Edit, Bash, Glob, Grep, Skill
+
+---
+
 ### Commands
 
 #### `/rgn.add-reference`
@@ -132,17 +213,58 @@ Comprehensive reference management system for articles, papers, videos, and docu
 
 ### Skills
 
-#### example-skill
+The plugin provides reusable skills organized into two categories:
 
-Demonstrates skill structure and organization for creating reusable capabilities.
+#### Architecture Skills
 
-**Purpose:**
-- Template for creating new plugin skills
-- Shows proper SKILL.md structure
-- Documents required frontmatter
+Skills for architecture documentation and design (used by backend-architect):
+
+- **create-adr** - Generate Architecture Decision Records
+- **c4-diagram** - Generate C4 architecture diagrams (Context, Container, Component)
+- **api-draft** - Document REST, GraphQL, gRPC, and async APIs
+- **sql-schema** - Document relational database schemas with ER diagrams and DDL
+- **mongodb-schema** - Document MongoDB collection schemas
+- **sequence-diagram** - Generate UML sequence diagrams
+- **state-diagram** - Generate UML state diagrams
+- **modules-diagram** - Generate package/module structure diagrams
+- **arch-checklist** - Review architecture documentation quality
+
+#### Engineering Skills
+
+Skills for Java Spring Boot project scaffolding and implementation (used by principal-engineer and spring-boot-engineer):
+
+**openapi-from-architecture** - Generate OpenAPI 3.x YAML from architecture docs
+- Converts API documentation from arc42 to OpenAPI specification
+- Creates contract-first API definitions
+- Includes schemas, security, validation, pagination patterns
+- Output: `src/main/resources/openapi.yaml` (packaged with application)
+
+**controllers-from-openapi** - Generate Spring Boot controllers and DTOs from OpenAPI
+- Reads OpenAPI YAML specification
+- Generates Request/Response DTOs as Java Records with validation
+- Generates REST Controllers with Spring and OpenAPI annotations
+- Creates test skeletons with MockMvc
+- Follows architecture pattern for package structure
+
+**spring-config** - Generate Spring Boot configuration files
+- application.yml with multiple profiles
+- Database, security, cache, messaging configuration
+
+**spring-docker** - Generate Docker and Kubernetes manifests
+- Multi-stage Dockerfile, docker-compose.yml
+- Kubernetes Deployment, Service, ConfigMap manifests
+
+**spring-observability** - Configure observability stack
+- Metrics, tracing, logging, custom KPIs
+
+**spring-testing-setup** - Setup comprehensive testing framework
+- JUnit 5, Testcontainers, MockMvc, contract tests
+
+**spring-virtual-threads** - Configure JDK 24+ virtual threads
+- Virtual thread configuration and optimization
 
 **Usage:**
-Invoke during conversations when reusable capability is needed. Skills provide context and instructions that agents can follow.
+Skills are invoked automatically by agents during their workflows. For example, principal-engineer uses `openapi-from-architecture` and `controllers-from-openapi` to implement contract-first API development.
 
 ---
 
@@ -213,7 +335,12 @@ ragna-claude-plugins/
 │       ├── summaries/           # AI-generated summaries
 │       └── mindmaps/            # Hierarchical concept maps
 ├── agents/
-│   └── backend-architect.md     # Architecture design agent
+│   ├── backend-architect.md     # Architecture design agent
+│   ├── principal-engineer.md    # Java project scaffolding agent
+│   ├── spring-boot-engineer.md  # Spring Boot implementation agent
+│   ├── kubernetes-engineer.md   # Kubernetes deployment specialist
+│   ├── mongodb-pro.md           # MongoDB expert
+│   └── sql-pro.md               # SQL expert
 ├── commands/
 │   └── rgn.add-reference.md     # Reference management command
 ├── skills/
@@ -258,6 +385,53 @@ ragna-claude-plugins/
 - `adrs/adr-0001.md` - "Microservices vs Monolith"
 - `adrs/adr-0002.md` - "Event Sourcing for Orders"
 - `adrs/adr-0003.md` - "PostgreSQL for Transactional Data"
+
+### Project Scaffolding from Architecture
+
+**Scenario:** Scaffold Spring Boot project from architecture documentation
+
+1. After backend-architect creates architecture, use principal-engineer:
+   ```
+   Scaffold a Java Spring Boot project based on the architecture in .spec/architecture/:
+   - Read the arc42 documentation and ADRs
+   - Follow the Hexagonal architecture pattern
+   - Create Maven project with JDK 24+
+   - Generate skeleton classes for order-service
+   - Setup PostgreSQL and Kafka integration
+   - Prepare Docker and Kubernetes manifests
+   ```
+
+2. principal-engineer agent will:
+   - Parse arc42 documentation for components and requirements
+   - Read ADRs for technology choices and patterns
+   - Generate Maven/Gradle build configuration
+   - Create package structure following Hexagonal architecture
+   - Generate skeleton controllers, services, repositories, entities
+   - Create application.yml with profiles (dev, test, prod)
+   - Generate Docker and Kubernetes manifests
+   - Create README.md and IMPLEMENTATION-GUIDE.md
+
+3. spring-boot-engineer agent can then:
+   - Implement business logic in service classes
+   - Add security configuration (OAuth2/JWT)
+   - Write comprehensive tests (>85% coverage)
+   - Configure observability (metrics, tracing, logging)
+   - Optimize performance with virtual threads
+
+**Output Example:**
+- Complete Maven project structure with dependencies
+- Package hierarchy: `application/`, `domain/`, `infrastructure/`
+- 15+ skeleton Java files with TODOs
+- Configuration files with environment-specific profiles
+- Docker multi-stage build and docker-compose.yml
+- Kubernetes Deployment, Service, and Ingress manifests
+- Comprehensive handoff documentation
+
+**Workflow:**
+```
+backend-architect     → principal-engineer      → spring-boot-engineer
+(.spec/architecture/) → (scaffolded project)    → (implemented code)
+```
 
 ### Knowledge Base Management
 
