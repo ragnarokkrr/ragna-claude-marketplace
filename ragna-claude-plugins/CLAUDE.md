@@ -22,6 +22,22 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 - Supports Hexagonal, Vertical Slice, DDD, microservices patterns
 - Output: `.spec/architecture/application-architecture.md` with integrated skill artifacts
 
+**principal-engineer.md**
+- Principal engineer for scaffolding Java Spring Boot projects from architecture specifications
+- Reads arc42 docs and ADRs, translates architecture into concrete project structure
+- Generates Maven/Gradle build configuration with JDK 24+ support
+- Creates package structure following architectural patterns (Hexagonal, Vertical Slice, DDD, Layered)
+- Generates skeleton classes: controllers, services, repositories, entities, DTOs, configuration
+- Prepares Docker, Kubernetes manifests, and comprehensive handoff documentation
+- Bridges gap between backend-architect (design) and spring-boot-engineer (implementation)
+
+**spring-boot-engineer.md**
+- Spring Boot 3+ engineer with JDK 24+ modern Java features
+- Virtual threads, structured concurrency, pattern matching expertise
+- Microservices architecture and Spring Cloud integration
+- Reactive programming with WebFlux
+- Production-ready applications with comprehensive testing
+
 **kubernetes-engineer.md**
 - Kubernetes deployment and operations specialist
 - k3s lightweight cluster management for development and edge deployments
@@ -35,13 +51,6 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 - Schema design with embedding vs. referencing strategies
 - Indexing strategies, sharding, and replication configuration
 - Performance optimization and query plan analysis
-
-**spring-boot-engineer.md**
-- Spring Boot 3+ engineer with JDK 24+ modern Java features
-- Virtual threads, structured concurrency, pattern matching expertise
-- Microservices architecture and Spring Cloud integration
-- Reactive programming with WebFlux
-- Production-ready applications with comprehensive testing
 
 **sql-pro.md**
 - Expert SQL developer across PostgreSQL, MySQL, SQL Server, Oracle
