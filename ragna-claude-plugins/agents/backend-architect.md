@@ -160,8 +160,8 @@ Create `.spec/architecture/application-architecture.md` with sections 1-12:
 
 **Section 8: Crosscutting Concepts**
 - 8.1 Domain & Data Concepts (ubiquitous language, schema ownership, **high-level data model**)
-  - **For SQL**: Invoke `mongodb-schema` skill (it handles both SQL ER diagrams and MongoDB)
-  - **For MongoDB**: Invoke `mongodb-schema` skill for **JSON schemas with relationships**
+  - **For SQL databases (PostgreSQL, MySQL, SQL Server, Oracle)**: Invoke `sql-schema` skill for **ER diagrams and DDL**
+  - **For MongoDB (document database)**: Invoke `mongodb-schema` skill for **JSON schemas with relationships**
   - Include conceptual model (Level 1) here
 - 8.2 Security & Compliance (authn/z, threat model, privacy controls)
 - 8.3 Resilience & Performance (caching, throttling, graceful degradation)
@@ -196,7 +196,8 @@ Create `.spec/architecture/application-architecture.md` with sections 1-12:
 | `create-adr` | Major architectural decision made | `.spec/architecture/adrs/adr-XXXX.md` |
 | `c4-diagram` | Need system context, containers, or component structure | Mermaid C4 diagram (embed in arc42 section) |
 | `api-draft` | Documenting REST, GraphQL, gRPC, or async APIs | API tables and schemas (embed in Section 5) |
-| `mongodb-schema` | Documenting data models (SQL or NoSQL) | ER diagrams or JSON schemas (embed in Section 8) |
+| `sql-schema` | Documenting relational database schemas (PostgreSQL, MySQL, SQL Server, Oracle) | Mermaid ER diagrams and DDL scripts (embed in Section 8) |
+| `mongodb-schema` | Documenting MongoDB document schemas | JSON schemas with relationships (embed in Section 8) |
 | `sequence-diagram` | Showing runtime flows and interactions | Mermaid sequence diagram (embed in Section 6) |
 | `state-diagram` | Modeling entity lifecycles or workflows | Mermaid state diagram (embed in Section 6) |
 | `modules-diagram` | Showing package/module structure | Mermaid flowchart + table (embed in Section 5.3) |
@@ -295,7 +296,8 @@ Support these user directives:
 - **Sequence diagrams** → `sequence-diagram` (happy path, errors)
 - **State diagrams** → `state-diagram` (entity lifecycles)
 - **Module hierarchy** → `modules-diagram` (package structure)
-- **Data models** → `mongodb-schema` (SQL ER or MongoDB JSON)
+- **SQL data models** → `sql-schema` (ER diagrams and DDL for relational databases)
+- **MongoDB data models** → `mongodb-schema` (JSON schemas for document databases)
 
 ### API Documentation
 - **REST/GraphQL/gRPC** → `api-draft` skill (sync APIs)
@@ -334,7 +336,8 @@ Follow this sequence:
    - `sequence-diagram` for runtime flows
    - `state-diagram` for entity lifecycles
    - `modules-diagram` for package structure
-   - `mongodb-schema` for data models
+   - `sql-schema` for relational database models
+   - `mongodb-schema` for MongoDB document models
 7. **Integrate outputs** → embed skill results in appropriate sections
 8. **Check quality** → invoke `arch-checklist` skill
 9. **Refine iteratively** → address gaps until complete

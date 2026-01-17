@@ -35,7 +35,7 @@ When this skill is invoked:
    - Use JSON-like notation with type annotations
    - Show relationships with arrow notation (→)
    - Include index and validation sections for technical level
-   - Add Mermaid ER diagram for visual representation
+   - Add Mermaid relationship diagram for visual representation
 
 4. **Provide placement guidance:**
    - Explain where to place in arc42 documentation
@@ -146,9 +146,9 @@ For detailed implementation in Section 5.3 or 7.2:
 // - Zone sharding: by country for GDPR compliance
 ```
 
-### Mermaid ER Diagram
+### Mermaid Relationship Diagram
 
-Use Mermaid `erDiagram` for visual representation:
+Use Mermaid `erDiagram` syntax for MongoDB collection relationships:
 
 ```mermaid
 erDiagram
@@ -383,9 +383,9 @@ Skill: [Designs schema with timestamp-based sharding, TTL index, sparse indexes]
 
 | Level | Section | Content |
 |-------|---------|---------|
-| Level 1 (Domain) | 8.1 Domain & Data Concepts | Conceptual schema, relationships, ER diagram |
-| Level 2/3 (Technical) | 5.3 Components | Detailed schema with indexes, validation |
-| Level 2/3 (Infrastructure) | 7.2 Infrastructure Map | Sharding strategy, replication topology |
+| Level 1 (Domain) | 8.1 Domain & Data Concepts | Conceptual MongoDB schema, embedded vs referenced relationships |
+| Level 2/3 (Technical) | 5.3 Components | Detailed MongoDB schema with indexes, validation rules |
+| Level 2/3 (Infrastructure) | 7.2 Infrastructure Map | MongoDB sharding strategy, replica set topology |
 
 ## Error Handling
 
@@ -397,10 +397,18 @@ Skill: [Designs schema with timestamp-based sharding, TTL index, sparse indexes]
 ## Output Format
 
 Always provide:
-1. JSON-like schema notation with type annotations
-2. Relationship arrows (→) for references
-3. Index specifications with rationale
+1. JSON-like MongoDB schema notation with type annotations
+2. Relationship arrows (→) for document references
+3. MongoDB index specifications with rationale
 4. Validation rules for data quality
-5. Sharding strategy (if needed)
-6. Mermaid ER diagram for visual representation
+5. Sharding strategy (if needed for scale)
+6. Mermaid relationship diagram showing collections and references
 7. Recommended placement in arc42 documentation
+
+## Cross-References
+
+- **C4 diagrams (c4-diagram skill):** MongoDB collections complement container/component views
+- **API documentation (api-draft skill):** APIs map to MongoDB collections and operations
+- **Sequence diagrams (sequence-diagram skill):** Show MongoDB read/write transaction flows
+- **ADRs (create-adr skill):** Document MongoDB vs SQL decision, schema design choices
+- **SQL schemas (sql-schema skill):** Use for relational databases instead of MongoDB

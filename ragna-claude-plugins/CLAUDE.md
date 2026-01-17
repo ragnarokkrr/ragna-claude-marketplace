@@ -18,7 +18,7 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 - Senior backend architect agent for scalable service design
 - **Orchestrates skills** instead of embedding templates (DRY principle)
 - Gathers requirements, makes architectural decisions, coordinates artifact generation
-- Invokes specialized skills: create-adr, c4-diagram, api-draft, mongodb-schema, sequence-diagram, state-diagram, modules-diagram, arch-checklist
+- Invokes specialized skills: create-adr, c4-diagram, api-draft, sql-schema, mongodb-schema, sequence-diagram, state-diagram, modules-diagram, arch-checklist
 - Supports Hexagonal, Vertical Slice, DDD, microservices patterns
 - Output: `.spec/architecture/application-architecture.md` with integrated skill artifacts
 
@@ -75,12 +75,19 @@ Architecture documentation skills extracted from backend-architect agent capabil
 - Component diagrams show internal module structure
 - Includes participants, relationships, and technology specifications
 
+**sql-schema/** - Document relational database schemas (PostgreSQL, MySQL, SQL Server, Oracle)
+- Level 1 (Domain): ER diagrams showing entities and relationships
+- Level 2/3 (Technical): DDL scripts with indexes, constraints, partitioning
+- Mermaid ER diagrams and SQL DDL for table creation
+- Includes normalization analysis (1NF, 2NF, 3NF, BCNF)
+- Platform-specific features and index strategies
+
 **mongodb-schema/** - Document MongoDB collection schemas
-- Level 1 (Domain): Conceptual data model with relationships
+- Level 1 (Domain): Conceptual document model with embedded vs referenced relationships
 - Level 2/3 (Technical): Detailed schema with indexes, validation, sharding
 - JSON-like notation with type annotations and relationship arrows
-- Mermaid ER diagrams for visual representation
-- Includes indexing strategies and design decision guides
+- Mermaid relationship diagrams for visual representation
+- Includes indexing strategies and design decision guides for document databases
 
 **api-draft/** - Document REST, GraphQL, gRPC, and async APIs
 - REST: Endpoint tables with methods, paths, parameters, responses
