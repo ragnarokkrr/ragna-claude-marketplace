@@ -39,8 +39,10 @@ backend-architect          principal-engineer                principal-engineer
 ### Phase 1: Read OpenAPI Specification
 
 1. **Locate OpenAPI file:**
-   - Check project root: `./openapi.yaml`
-   - Check api-specs: `./api-specs/{service-name}-openapi.yaml`
+   - Primary location: `src/main/resources/openapi.yaml`
+   - Microservices: `src/main/resources/openapi/{service-name}-openapi.yaml`
+   - Alternative: `src/main/resources/api/openapi.yaml`
+   - Legacy location: `./openapi.yaml` (project root - for backwards compatibility)
    - Ask user if not found in standard locations
 
 2. **Parse OpenAPI structure:**
@@ -119,7 +121,7 @@ import jakarta.validation.constraints.*;
  * - Operation: createUser
  * - Schema: CreateUserRequest
  *
- * OpenAPI source: ./openapi.yaml
+ * OpenAPI source: src/main/resources/openapi.yaml
  */
 public record CreateUserRequest(
     @NotBlank(message = "Email is required")
@@ -178,7 +180,7 @@ import java.time.Instant;
  * Generated from OpenAPI specification:
  * - Schema: UserDto
  *
- * OpenAPI source: ./openapi.yaml
+ * OpenAPI source: src/main/resources/openapi.yaml
  */
 public record UserDto(
     Long id,
@@ -380,7 +382,7 @@ import jakarta.validation.constraints.Min;
  * - Tag: Users
  * - Base path: /api/v1/users
  *
- * OpenAPI source: ./openapi.yaml
+ * OpenAPI source: src/main/resources/openapi.yaml
  *
  * Architecture Pattern: Hexagonal
  *

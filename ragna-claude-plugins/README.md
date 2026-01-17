@@ -237,7 +237,7 @@ Skills for Java Spring Boot project scaffolding and implementation (used by prin
 - Converts API documentation from arc42 to OpenAPI specification
 - Creates contract-first API definitions
 - Includes schemas, security, validation, pagination patterns
-- Output: `openapi.yaml` ready for controller generation
+- Output: `src/main/resources/openapi.yaml` (packaged with application)
 
 **controllers-from-openapi** - Generate Spring Boot controllers and DTOs from OpenAPI
 - Reads OpenAPI YAML specification

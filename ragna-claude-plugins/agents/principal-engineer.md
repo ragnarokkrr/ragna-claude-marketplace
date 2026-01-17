@@ -488,10 +488,11 @@ Invoke the openapi-from-architecture skill to:
 - Read API documentation from .spec/architecture/application-architecture.md (Section 5.2)
 - Read ADRs for API versioning, security, error handling decisions
 - Generate complete OpenAPI 3.x YAML specification
-- Save to ./openapi.yaml (or ./api-specs/{service-name}-openapi.yaml for microservices)
+- Save to src/main/resources/openapi.yaml (packaged with application)
+- For microservices: src/main/resources/openapi/{service-name}-openapi.yaml
 ```
 
-**Output:** `openapi.yaml` with complete API specification including:
+**Output:** `src/main/resources/openapi.yaml` with complete API specification including:
 - All REST endpoints with methods, parameters, request/response schemas
 - Security schemes (OAuth2, JWT, API Key)
 - Error response formats
@@ -500,8 +501,14 @@ Invoke the openapi-from-architecture skill to:
 - API versioning
 
 **Example OpenAPI file location:**
-- Single service: `./openapi.yaml`
-- Microservices: `./api-specs/user-service-openapi.yaml`
+- Single service: `src/main/resources/openapi.yaml`
+- Microservices: `src/main/resources/openapi/user-service-openapi.yaml`
+
+**Benefits:**
+- Packaged with application JAR
+- Can be served via Spring Boot classpath
+- Swagger UI auto-configuration from resources
+- Easy to reference in application.yml
 
 **Validation:**
 - Ensure OpenAPI spec is valid (can use https://editor.swagger.io/)
@@ -518,7 +525,7 @@ Invoke the openapi-from-architecture skill to:
 
 ```
 Invoke the controllers-from-openapi skill to:
-- Read the generated openapi.yaml file
+- Read the generated src/main/resources/openapi.yaml file
 - Generate Request DTOs (Java Records) with validation annotations
 - Generate Response DTOs (Java Records)
 - Generate Enum types
@@ -839,6 +846,22 @@ spring:
       health:
         show-details: when-authorized
 
+# OpenAPI/Swagger UI Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+  show-actuator: false
+  # OpenAPI spec location in resources
+  openapi:
+    path: /openapi.yaml
+
+spring:
   # Security (OAuth2/JWT - TODO: Configure based on ADR)
   security:
     oauth2:

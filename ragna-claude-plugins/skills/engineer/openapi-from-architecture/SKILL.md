@@ -58,8 +58,16 @@ backend-architect          principal-engineer         principal-engineer
 Create `openapi.yaml` (or `{service-name}-openapi.yaml` for microservices) with complete specification.
 
 **File location:**
-- Single service: `./openapi.yaml` (project root)
-- Microservices: `./{service-name}/openapi.yaml` or `./api-specs/{service-name}-openapi.yaml`
+- Single service: `src/main/resources/openapi.yaml` (packaged with application)
+- Microservices: `src/main/resources/openapi/{service-name}-openapi.yaml`
+- Alternative: `src/main/resources/api/openapi.yaml`
+
+**Benefits of resources directory:**
+- Packaged with application JAR
+- Can be served via classpath
+- Spring Boot can auto-configure Swagger UI from it
+- Keeps API spec with application resources
+- Easy to reference in `application.yml` for springdoc configuration
 
 **OpenAPI 3.x Structure:**
 
@@ -719,18 +727,53 @@ components:
 
 ## Output Location
 
-**File:** `{project-root}/openapi.yaml` or `{project-root}/api-specs/{service-name}-openapi.yaml`
+**File:** `src/main/resources/openapi.yaml` (single service) or `src/main/resources/openapi/{service-name}-openapi.yaml` (microservices)
+
+**Structure for single service:**
+```
+project-root/
+├── src/
+│   └── main/
+│       └── resources/
+│           ├── openapi.yaml           # OpenAPI specification
+│           ├── application.yml         # Spring configuration
+│           └── db/migration/           # Flyway migrations
+└── .spec/
+    └── architecture/
+        └── application-architecture.md # Source architecture doc
+```
 
 **Structure for microservices:**
 ```
 project-root/
-├── api-specs/
-│   ├── user-service-openapi.yaml
-│   ├── order-service-openapi.yaml
-│   └── product-service-openapi.yaml
+├── user-service/
+│   └── src/main/resources/
+│       └── openapi/
+│           └── user-service-openapi.yaml
+├── order-service/
+│   └── src/main/resources/
+│       └── openapi/
+│           └── order-service-openapi.yaml
 └── .spec/
     └── architecture/
         └── application-architecture.md
+```
+
+**Spring Boot Integration:**
+
+Add to `application.yml` to expose the OpenAPI spec:
+
+```yaml
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  # Point to OpenAPI spec in resources
+  openapi:
+    custom-path: /openapi.yaml
 ```
 
 ## Integration with Controllers Generation

@@ -141,7 +141,7 @@ Engineering skills for Java Spring Boot project scaffolding and implementation:
 - Includes validation constraints, pagination patterns, error response formats
 - Supports JWT/OAuth2/API Key security schemes
 - Creates contract-first API specification as single source of truth
-- Output: `openapi.yaml` or `api-specs/{service-name}-openapi.yaml`
+- Output: `src/main/resources/openapi.yaml` (packaged with application JAR)
 
 **controllers-from-openapi/** - Generate Spring Boot controllers and DTOs from OpenAPI
 - Reads OpenAPI 3.x YAML specification
