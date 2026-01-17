@@ -14,12 +14,13 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 
 ### Agents (`agents/`)
 
-**backend-architect.md** (11,603 lines)
+**backend-architect.md** (452 lines - refactored orchestrator)
 - Senior backend architect agent for scalable service design
-- Generates arc42 documentation with C4, UML, and ER diagrams
-- Creates Architecture Decision Records (ADRs)
+- **Orchestrates skills** instead of embedding templates (DRY principle)
+- Gathers requirements, makes architectural decisions, coordinates artifact generation
+- Invokes specialized skills: create-adr, c4-diagram, api-draft, mongodb-schema, sequence-diagram, state-diagram, modules-diagram, arch-checklist
 - Supports Hexagonal, Vertical Slice, DDD, microservices patterns
-- Output: `.spec/architecture/application-architecture.md` and `adrs/`
+- Output: `.spec/architecture/application-architecture.md` with integrated skill artifacts
 
 **kubernetes-engineer.md**
 - Kubernetes deployment and operations specialist
