@@ -477,11 +477,77 @@ mkdir -p src/test/java/com/example/service/{application,domain,infrastructure}
 mkdir -p src/test/resources
 ```
 
-### Phase 4: Skeleton Code Generation
+### Phase 4: OpenAPI Specification Generation
 
-**Objective:** Generate skeleton classes for core components
+**Objective:** Generate OpenAPI 3.x YAML specification from architecture documentation
 
-**4.1 Main Application Class:**
+**Use the `openapi-from-architecture` skill:**
+
+```
+Invoke the openapi-from-architecture skill to:
+- Read API documentation from .spec/architecture/application-architecture.md (Section 5.2)
+- Read ADRs for API versioning, security, error handling decisions
+- Generate complete OpenAPI 3.x YAML specification
+- Save to ./openapi.yaml (or ./api-specs/{service-name}-openapi.yaml for microservices)
+```
+
+**Output:** `openapi.yaml` with complete API specification including:
+- All REST endpoints with methods, parameters, request/response schemas
+- Security schemes (OAuth2, JWT, API Key)
+- Error response formats
+- Validation constraints
+- Pagination patterns
+- API versioning
+
+**Example OpenAPI file location:**
+- Single service: `./openapi.yaml`
+- Microservices: `./api-specs/user-service-openapi.yaml`
+
+**Validation:**
+- Ensure OpenAPI spec is valid (can use https://editor.swagger.io/)
+- Verify all endpoints from architecture are included
+- Check security schemes match ADRs
+
+---
+
+### Phase 5: REST Controllers and DTOs Generation
+
+**Objective:** Generate Spring Boot controllers and DTOs from OpenAPI specification
+
+**Use the `controllers-from-openapi` skill:**
+
+```
+Invoke the controllers-from-openapi skill to:
+- Read the generated openapi.yaml file
+- Generate Request DTOs (Java Records) with validation annotations
+- Generate Response DTOs (Java Records)
+- Generate Enum types
+- Generate REST Controllers with OpenAPI annotations
+- Generate controller test skeletons
+- Place files according to architecture pattern (Hexagonal, Vertical Slice, DDD, Layered)
+```
+
+**Output:** Controllers and DTOs following contract-first approach:
+- Request DTOs: `Create{Resource}Request.java`, `Update{Resource}Request.java`
+- Response DTOs: `{Resource}Dto.java`, `{Resource}Page.java`
+- Controllers: `{Resource}Controller.java` with all CRUD operations
+- Tests: `{Resource}ControllerTest.java`
+- Enums: `{EnumName}.java`
+
+**Benefits of contract-first approach:**
+- OpenAPI spec serves as single source of truth
+- Controllers match API contract exactly
+- Swagger UI automatically available
+- Client SDKs can be generated from same spec
+- API changes tracked in version control
+
+---
+
+### Phase 6: Domain and Service Skeleton Generation
+
+**Objective:** Generate skeleton classes for domain and service layers
+
+**6.1 Main Application Class:**
 
 ```java
 package com.example.service;
@@ -505,85 +571,7 @@ public class Application {
 }
 ```
 
-**4.2 Generate Controllers from API Documentation:**
-
-Read API endpoints from arc42 Section 5.2 or API documentation, then generate:
-
-```java
-package com.example.service.infrastructure.adapter.in.web;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-
-/**
- * REST Controller for [Resource Name]
- * Generated from architecture specification
- *
- * Implements endpoints:
- * - GET /api/v1/resources - List all resources
- * - GET /api/v1/resources/{id} - Get resource by ID
- * - POST /api/v1/resources - Create new resource
- * - PUT /api/v1/resources/{id} - Update resource
- * - DELETE /api/v1/resources/{id} - Delete resource
- *
- * TODO: Implement business logic in service layer
- * TODO: Add security annotations per ADR-XXX
- * TODO: Add OpenAPI annotations for API documentation
- */
-@RestController
-@RequestMapping("/api/v1/resources")
-@RequiredArgsConstructor
-@Slf4j
-public class ResourceController {
-
-    // TODO: Inject service via constructor
-    // private final ResourceService resourceService;
-
-    @GetMapping
-    public ResponseEntity<?> listResources(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        log.info("Listing resources - page: {}, size: {}", page, size);
-        // TODO: Implement listing logic
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getResource(@PathVariable Long id) {
-        log.info("Getting resource with ID: {}", id);
-        // TODO: Implement get logic
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createResource(@Valid @RequestBody Object request) {
-        log.info("Creating resource");
-        // TODO: Implement create logic
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateResource(
-            @PathVariable Long id,
-            @Valid @RequestBody Object request) {
-        log.info("Updating resource with ID: {}", id);
-        // TODO: Implement update logic
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteResource(@PathVariable Long id) {
-        log.info("Deleting resource with ID: {}", id);
-        // TODO: Implement delete logic
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-}
-```
-
-**4.3 Generate Service Interfaces and Stubs:**
+**6.2 Generate Service Interfaces and Stubs:**
 
 ```java
 package com.example.service.application.port.in;
@@ -645,7 +633,7 @@ public class ResourceService {
 }
 ```
 
-**4.4 Generate Repositories from Data Models:**
+**6.3 Generate Repositories from Data Models:**
 
 Read ER diagrams or data model from arc42 Section 8, then generate:
 
@@ -677,7 +665,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>,
 }
 ```
 
-**4.5 Generate Domain Entities:**
+**6.4 Generate Domain Entities:**
 
 ```java
 package com.example.service.domain.model;
@@ -747,59 +735,11 @@ public class Resource {
 }
 ```
 
-**4.6 Generate DTOs (Records):**
+**Note:** DTOs (Request/Response) are now generated automatically in Phase 5 by the `controllers-from-openapi` skill from the OpenAPI specification.
 
-```java
-package com.example.service.infrastructure.adapter.in.web.dto;
+---
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
-/**
- * Request DTO for creating [Resource]
- * Generated from architecture specification
- *
- * Validation rules:
- * - name: required, 1-255 characters
- * - description: optional
- *
- * TODO: Add field validation constraints
- * TODO: Add API documentation annotations
- */
-public record CreateResourceRequest(
-    @NotBlank(message = "Name is required")
-    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
-    String name,
-
-    String description
-
-    // TODO: Add fields based on API specification
-) {}
-```
-
-```java
-package com.example.service.infrastructure.adapter.in.web.dto;
-
-import java.time.Instant;
-
-/**
- * Response DTO for [Resource]
- * Generated from architecture specification
- *
- * TODO: Add fields based on API specification
- */
-public record ResourceDto(
-    Long id,
-    String name,
-    String description,
-    Instant createdAt,
-    Instant updatedAt
-
-    // TODO: Add fields to expose
-) {}
-```
-
-**4.7 Generate Configuration Classes:**
+**6.5 Generate Configuration Classes:**
 
 ```java
 package com.example.service.infrastructure.config;
@@ -846,7 +786,7 @@ public record ApplicationProperties(
 ) {}
 ```
 
-### Phase 5: Configuration Files
+### Phase 7: Configuration Files
 
 **Objective:** Generate application.yml and profile configurations
 
@@ -983,7 +923,7 @@ logging:
     com.example.service: INFO
 ```
 
-### Phase 6: Supporting Files
+### Phase 8: Supporting Files
 
 **Objective:** Create Docker, README, and other essential files
 
@@ -1298,7 +1238,7 @@ spec:
   type: ClusterIP
 ```
 
-### Phase 7: Handoff Documentation
+### Phase 9: Handoff Documentation
 
 **Objective:** Document what was generated and what needs implementation
 

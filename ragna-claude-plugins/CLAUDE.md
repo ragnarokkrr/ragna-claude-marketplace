@@ -133,6 +133,63 @@ Architecture documentation skills extracted from backend-architect agent capabil
 - Suggests specific skills to address missing items
 - Status indicators: ✓ (complete), □ (missing), ⚠ (incomplete)
 
+Engineering skills for Java Spring Boot project scaffolding and implementation:
+
+**openapi-from-architecture/** - Generate OpenAPI 3.x YAML from architecture docs
+- Reads API documentation from arc42 Section 5.2 and ADRs
+- Generates complete OpenAPI 3.x specification with all endpoints, schemas, security
+- Includes validation constraints, pagination patterns, error response formats
+- Supports JWT/OAuth2/API Key security schemes
+- Creates contract-first API specification as single source of truth
+- Output: `openapi.yaml` or `api-specs/{service-name}-openapi.yaml`
+
+**controllers-from-openapi/** - Generate Spring Boot controllers and DTOs from OpenAPI
+- Reads OpenAPI 3.x YAML specification
+- Generates Request DTOs (Java Records) with Jakarta validation annotations
+- Generates Response DTOs (Java Records) and pagination DTOs
+- Generates REST Controllers with Spring annotations (@RestController, @RequestMapping)
+- Adds OpenAPI annotations (@Operation, @ApiResponses, @SecurityRequirement)
+- Generates controller test skeletons with MockMvc
+- Follows architecture pattern (Hexagonal, Vertical Slice, DDD, Layered) for package structure
+- Contract-first approach: Controllers match OpenAPI spec exactly
+
+**spring-config/** - Generate Spring Boot configuration files
+- application.yml with multiple profiles (dev, test, prod)
+- Database configuration (JPA, connection pooling)
+- Security configuration templates
+- Cache configuration (Redis, Caffeine)
+- Message queue configuration (Kafka, RabbitMQ)
+
+**spring-docker/** - Generate Docker and Kubernetes manifests
+- Multi-stage Dockerfile for Spring Boot applications
+- docker-compose.yml for local development
+- Kubernetes Deployment, Service, ConfigMap, Secret manifests
+- Helm chart templates
+- Optimized for JDK 24+ with virtual threads
+
+**spring-observability/** - Configure observability stack
+- Micrometer metrics configuration
+- Distributed tracing (Zipkin, Jaeger)
+- Structured logging (Logback, SLF4J)
+- Custom metrics for business KPIs
+- Grafana dashboard templates
+- Actuator endpoints configuration
+
+**spring-testing-setup/** - Setup comprehensive testing framework
+- JUnit 5 test structure
+- Testcontainers for integration tests
+- MockMvc for controller tests
+- RestAssured for API tests
+- Contract testing setup (Pact)
+- Test data builders and fixtures
+
+**spring-virtual-threads/** - Configure JDK 24+ virtual threads
+- Virtual thread configuration in Spring Boot 3.3+
+- Structured concurrency patterns
+- Async processing with virtual threads
+- Performance optimization guidelines
+- Virtual thread-aware connection pooling
+
 ### Hooks (`hooks/hooks.json`)
 
 - `user-prompt-submit` - Triggered on prompt submission
