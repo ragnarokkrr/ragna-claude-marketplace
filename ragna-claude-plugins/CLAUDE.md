@@ -14,12 +14,13 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 
 ### Agents (`agents/`)
 
-**backend-architect.md** (11,603 lines)
+**backend-architect.md** (452 lines - refactored orchestrator)
 - Senior backend architect agent for scalable service design
-- Generates arc42 documentation with C4, UML, and ER diagrams
-- Creates Architecture Decision Records (ADRs)
+- **Orchestrates skills** instead of embedding templates (DRY principle)
+- Gathers requirements, makes architectural decisions, coordinates artifact generation
+- Invokes specialized skills: create-adr, c4-diagram, api-draft, sql-schema, mongodb-schema, sequence-diagram, state-diagram, modules-diagram, arch-checklist
 - Supports Hexagonal, Vertical Slice, DDD, microservices patterns
-- Output: `.spec/architecture/application-architecture.md` and `adrs/`
+- Output: `.spec/architecture/application-architecture.md` with integrated skill artifacts
 
 **kubernetes-engineer.md**
 - Kubernetes deployment and operations specialist
@@ -59,7 +60,69 @@ This is the **ragna-claude-plugins** plugin for Claude Code, providing RagnaRokk
 
 ### Skills (`skills/`)
 
-**example-skill/** - Template demonstrating skill structure
+Architecture documentation skills extracted from backend-architect agent capabilities:
+
+**create-adr/** - Generate Architecture Decision Records (ADRs)
+- Creates standardized ADR files in `.spec/architecture/adrs/`
+- Follows template: Status, Context, Decision, Consequences
+- Auto-increments ADR numbers (ADR-0001, ADR-0002, etc.)
+- Documents alternatives considered and trade-offs
+
+**c4-diagram/** - Generate C4 architecture diagrams (Context, Container, Component)
+- Creates Mermaid C4 diagrams for different abstraction levels
+- Context diagrams show system boundaries and external actors
+- Container diagrams show services, databases, message queues
+- Component diagrams show internal module structure
+- Includes participants, relationships, and technology specifications
+
+**sql-schema/** - Document relational database schemas (PostgreSQL, MySQL, SQL Server, Oracle)
+- Level 1 (Domain): ER diagrams showing entities and relationships
+- Level 2/3 (Technical): DDL scripts with indexes, constraints, partitioning
+- Mermaid ER diagrams and SQL DDL for table creation
+- Includes normalization analysis (1NF, 2NF, 3NF, BCNF)
+- Platform-specific features and index strategies
+
+**mongodb-schema/** - Document MongoDB collection schemas
+- Level 1 (Domain): Conceptual document model with embedded vs referenced relationships
+- Level 2/3 (Technical): Detailed schema with indexes, validation, sharding
+- JSON-like notation with type annotations and relationship arrows
+- Mermaid relationship diagrams for visual representation
+- Includes indexing strategies and design decision guides for document databases
+
+**api-draft/** - Document REST, GraphQL, gRPC, and async APIs
+- REST: Endpoint tables with methods, paths, parameters, responses
+- GraphQL: Schema definitions with queries, mutations, subscriptions
+- gRPC: Service definitions with RPC methods and message types
+- Async: Event channel tables with producers, consumers, message schemas
+- Includes request/response examples and versioning strategies
+
+**sequence-diagram/** - Generate UML sequence diagrams for runtime behavior
+- Happy path scenarios (primary success flows)
+- Error/failure scenarios (degraded mode, retries, fallbacks)
+- Background/async processing flows
+- Shows message flows, timing, activations, control flow (alt/opt/loop)
+- Illustrates patterns like circuit breaker, saga, retry with backoff
+
+**state-diagram/** - Generate UML state diagrams for lifecycle modeling
+- Entity lifecycles (Order, User, Payment)
+- Workflow states (Approval, Deployment, Build pipeline)
+- State transitions with events, guards, and actions
+- Composite and parallel states for complex behavior
+- Entry/exit actions and state invariants
+
+**modules-diagram/** - Generate hierarchical module/package structure
+- 3-4 level nested package hierarchy using Mermaid flowchart
+- Lowercase dot notation (e.g., `orders.domain.model`)
+- No arrows (structure only, not dependencies)
+- Description table matching diagram identifiers
+- Supports hexagonal, vertical slice, DDD, clean architecture patterns
+
+**arch-checklist/** - Review architecture documentation quality
+- Comprehensive checklist for arc42 sections, diagrams, ADRs
+- Critical/Important/Enhanced categorization with scoring
+- Identifies gaps and prioritizes refinements
+- Suggests specific skills to address missing items
+- Status indicators: ✓ (complete), □ (missing), ⚠ (incomplete)
 
 ### Hooks (`hooks/hooks.json`)
 
